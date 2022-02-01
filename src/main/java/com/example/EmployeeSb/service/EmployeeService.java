@@ -1,6 +1,8 @@
 package com.example.EmployeeSb.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,15 @@ public class EmployeeService {
 		
 		Employee updatedEmployee = employeeRepository.save(employee);
 		return ResponseEntity.ok(updatedEmployee);
+	}
+	
+	public ResponseEntity<Map<String, Boolean>> deleteEmployee(Long id) {
+		Employee employee = employeeRepository.findById(id)
+				.orElseThrow(() -> new RecourseNotFoundException("Employee With Id" + id + " Does Not Exist"));
+		employeeRepository.delete(employee);
+		Map<String, Boolean> response = new HashMap<String, Boolean>();
+		response.put("deleted", Boolean.TRUE);
+		return ResponseEntity.ok(response);
 	}
 	
 }
